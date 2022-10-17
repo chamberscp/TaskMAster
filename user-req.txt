@@ -1,0 +1,12 @@
+# Customer Statement of Needs
+
+1.  Keep track of tasks
+2.  Work from a text user interface
+3.  Add tasks
+4.  Delete tasks on completion
+5.  When marked as completed, delete completed task
+6.  List tasks in order they were created
+7.  Available on multiple terminals at once
+8.  Multiple users with own list
+9.  Editable storage format
+
