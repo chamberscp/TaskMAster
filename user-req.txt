@@ -1,12 +1,34 @@
 # Customer Statement of Needs
+# UR = User Requirement
+# DR = Developer Requirement
 
 1.  Keep track of tasks
+	# Display top 5 tasks on login
+	# Command line interface with numbered options for UR#3, UR#4, DR#1, DR#2 
+
 2.  Work from a text user interface
+	# stretch goal #1 - Offer GUI application
+
 3.  Add tasks
+	# User Arguments
+	# Add to/ Expand List
+
 4.  Delete tasks on completion
-5.  When marked as completed, delete completed task
-6.  List tasks in order they were created
-7.  Available on multiple terminals at once
-8.  Multiple users with own list
-9.  Editable storage format
+	
+5.  List tasks in order they were created
+
+6.  Available on multiple terminals at once
+
+7.  Multiple users with own list
+	# DB or User Table/Array???
+
+8.  Editable storage format
+	# DB or User Table/Array???
+
+# Developer Requirements
+1.  Save, refresh on completion of function
+	#End on Loop, refresh rate
+
+2.  Exit system
+	# else if exit
 
