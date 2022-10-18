@@ -8,6 +8,7 @@
     # Count remaining tasks in list
     # Exit
     
+from curses.ascii import isalpha
 import sys
 import datetime
 from pyfiglet import Figlet
@@ -18,26 +19,25 @@ con = sqlite3.connect("taskmasterdb.db")
 f = Figlet(font='big')
 print(f.renderText('Task Master 3000'))
 
-print("Please enter your username: ")
+count = 0
 
-userlist = ["elliot", "chris"]
-name = input()
+while count < 3:
+    count = 0
+    user_list = ["Elliot", "Chris"]
+    user_name = input("Please enter your username: ")
+    if user_name in user_list:
+        print(f"Welcome " + user_name)
+        break
+    else:
+        print("Unauthorized user.  Please enter valid username: ")                            
+                    
 
-if name.lower() in userlist:
-    print(f'Welcome ' + name )
-else:
-    print("User not authorized.  Please enter valid username: ")
-
-
-def greet(name):
-   pass
-    
+def addtask():
+    pass
 
 def displaytop5(tasks):
     pass
    
-def addtask():
-    pass
 
 def deltask():
     pass
