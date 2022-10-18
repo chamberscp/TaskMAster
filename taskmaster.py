@@ -10,9 +10,24 @@
     
 import sys
 import datetime
+from pyfiglet import Figlet
+import sqlite3
 
-print(""" Greetings.  Please enter you username """)
-  
+con = sqlite3.connect("taskmasterdb.db")
+
+f = Figlet(font='big')
+print(f.renderText('Task Master 3000'))
+
+print("Please enter your username: ")
+
+userlist = ["elliot", "chris"]
+name = input()
+
+if name.lower() in userlist:
+    print(f'Welcome ' + name )
+else:
+    print("User not authorized.  Please enter valid username: ")
+
 
 def greet(name):
    pass
