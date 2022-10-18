@@ -1,1 +1,1 @@
-python taskmaster.py %1 %2
+python3 taskmaster.py "$@"
