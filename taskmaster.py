@@ -1,43 +1,29 @@
-
-# Import modules
-# Breakout of functions
-    # Login/ Greeting
-    # Help Section/ Commands
-    # Display taskmasters
-    # Add tasks
-    # Remove tasks
-    # Show whole list
-    # Count remaining tasks in list
-    # Exit
-
-
 import sys
 from pyfiglet import Figlet
-
+import os.path
 
 #Figletdisplays the taskmaster MASTER 3000 Logo in "big" wordart format
 f = Figlet(font='big')
 print(f.renderText('Task Master 3000'))
 
-count = 0
-
-'''#Login Section.  Requires the user to login (case sensative).  User will have 3 attempts to login before being booted.
-while count < 3:
-    count = 0
-    user_list = ["Elliot", "Chris"]
-    user_name = input("Please enter your username: ")
-    if user_name in user_list:
-        print(f"Welcome " + user_name)
-        break
-    else:
-        print("Unauthorized user.  Please enter valid username: ")'''                          
-                    
 # Commands Section - Defines the commands the user can input.
-    
-# Function to display top 5 tasks (from input first).  Will add a timestamp feature/locater later.
-def dt5(taskmasters):
-    pass
+x = """              Task Master 3000 Commands:
+task add "task name"  		# Adds new tasks
+task show               	# Show all remaining tasks
+task delete "task number"       # Delete a task
+task count                      # Counts the number of remaining tasks
+"""
+print(x)
 
+#Login Section.  Requires the user to login (case sensative).  User will have 3 attempts to login before being booted.
+user_list = ["Elliot", "Chris"]
+user_name = input("Please enter your username: ")
+if user_name in user_list:
+    print(f"Welcome " + user_name)
+        continue
+    else:
+        print("Unauthorized user.  Please enter valid username: ")                   
+                    
 # Function to add tasks
 def add(newtask):
     f = open('taskmaster.txt', 'a')
@@ -45,8 +31,7 @@ def add(newtask):
     f.write("\n")
     f.close()
     newtask = '"'+newtask+'"'
-    print(f"Added task: {newtask}")
-    
+    print(f"Added the task: {newtask}") 
    
 # Function that deletes a task
 def delete(number):
@@ -67,17 +52,17 @@ def delete(number):
         
  # Function that shows a list of tasks
 def show():
-    try:
-        ud()
-        length = len(d)
-        k = length
-        for i in d:
-            sys.stdout.buffer.write(f"[{length}] {d[length]}")
-            sys.stdout.buffer.write("\n")
-            length = length - 1
-    except Exception as e:
-        raise e
- 
+    with open("taskmaster.txt", 'r') as q:
+        if os.path.getsize('taskmaster.txt'):
+            content = q.read()
+            contents = content.split("\n")
+            count = 0
+            content in reversed(contents)
+            count += 1
+            print(f"{count}: {content}")
+        else:
+            print("You don't have any tasks")
+        
 # Function to update list of tasks
 def ud():
     try:
@@ -88,8 +73,16 @@ def ud():
             d.update({c: line})
             c = c+1
     except:
-        sys.stdout.buffer.write("You have no pending tasks")
+        print("You have no pending tasks")
 
+def count():
+    with open("taskmaster.txt", "r") as lc:
+        var1 = len(lc.readlines())
+        if var1 < 1:
+            print("You have 0 tasks left")
+        else:
+            print(f"You have {var1} tasks left")        
+        
 # Main block of code
 if __name__ == '__main__':
     try:
@@ -99,21 +92,12 @@ if __name__ == '__main__':
         if(args[1] == 'delete'):
             args[1] = 'delete'
         if(args[1] == 'add' and len(args[2:]) == 0):
-            sys.stdout.buffer.write(
-                "Error: Missing todo string. Nothing added!")
+            print("You forgot to list the task after the add command")
  
         elif(args[1] == 'delete' and len(args[2:]) == 0):
-            sys.stdout.buffer.write(
-                "Error: Missing numberBER for deleting todo.")
+            print("You forgot to tell me what number to delete.  Please try again")
         else:
             globals()[args[1]](*args[2:])
- 
-    except Exception as e:
- 
- # Commands Section - Defines the commands the user can input.
-        x = """Task Master 3000 Commands:
-task add "task name"  		# Adds new tasks
-task show               	# Show all remaining tasks
-task delete "task number"   # Delete a todo
-"""
-        sys.stdout.buffer.write(x)
+    finally:
+            ud()
+        
