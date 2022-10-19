@@ -18,11 +18,12 @@ print(x)
 #Login Section.  Requires the user to login (case sensative).  User will have 3 attempts to login before being booted.
 user_list = ["Elliot", "Chris"]
 user_name = input("Please enter your username: ")
-if user_name in user_list:
+while user_name in user_list:
     print(f"Welcome " + user_name)
-        continue
-    else:
-        print("Unauthorized user.  Please enter valid username: ")                   
+    break
+else:
+    print("Unauthorized user.  Please enter valid username: ")
+    quit()            
                     
 # Function to add tasks
 def add(newtask):
@@ -83,7 +84,7 @@ def count():
         else:
             print(f"You have {var1} tasks left")        
         
-# Main block of code
+# Main block
 if __name__ == '__main__':
     try:
         d = {}
@@ -93,7 +94,6 @@ if __name__ == '__main__':
             args[1] = 'delete'
         if(args[1] == 'add' and len(args[2:]) == 0):
             print("You forgot to list the task after the add command")
- 
         elif(args[1] == 'delete' and len(args[2:]) == 0):
             print("You forgot to tell me what number to delete.  Please try again")
         else:
