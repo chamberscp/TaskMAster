@@ -54,13 +54,9 @@ def delete(number):
  # Function that shows a list of tasks
 def show():
     with open(user_name + '.txt', 'r') as q:
-        if os.path.getsize(user_name +'.txt'):
-            content = q.read()
-            contents = content.split("\n")
-            count = 0
-            content in reversed(contents)
-            count += 1
-            print(f"{count}: {content}")
+        if os.path.getsize(user_name +'.txt') >1:
+            for i, line in enumerate(q, start=1):
+                print('{} = {}'.format(i, line.strip()))      
         else:
             print("You don't have any tasks")
         
