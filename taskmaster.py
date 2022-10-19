@@ -27,7 +27,7 @@ else:
                     
 # Function to add tasks
 def add(newtask):
-    f = open('taskmaster.txt', 'a')
+    f = open(user_name +'.txt', 'a')
     f.write(newtask)
     f.write("\n")
     f.close()
@@ -39,7 +39,7 @@ def delete(number):
     try:
         number = int(number)
         ud()
-        with open("taskmaster.txt", "r+") as f:
+        with open(user_name +'.txt', "r+") as f:
             lines = f.readlines()
             f.seek(0)
             for i in lines:
@@ -53,8 +53,8 @@ def delete(number):
         
  # Function that shows a list of tasks
 def show():
-    with open("taskmaster.txt", 'r') as q:
-        if os.path.getsize('taskmaster.txt'):
+    with open(user_name + '.txt', 'r') as q:
+        if os.path.getsize(user_name +'.txt'):
             content = q.read()
             contents = content.split("\n")
             count = 0
@@ -67,7 +67,7 @@ def show():
 # Function to update list of tasks
 def ud():
     try:
-        f = open('taskmaster.txt', 'r')
+        f = open(user_name +'.txt', 'r')
         c = 1
         for line in f:
             line = line.strip('\n')
@@ -77,7 +77,7 @@ def ud():
         print("You have no pending tasks")
 
 def count():
-    with open("taskmaster.txt", "r") as lc:
+    with open(user_name + '.txt', "r") as lc:
         var1 = len(lc.readlines())
         if var1 < 1:
             print("You have 0 tasks left")
