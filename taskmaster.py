@@ -1,6 +1,6 @@
 import sys
 from pyfiglet import Figlet
-import os.path
+import os
 
 #Figletdisplays the taskmaster MASTER 3000 Logo in "big" wordart format
 f = Figlet(font='big')
@@ -8,14 +8,14 @@ print(f.renderText('Task Master 3000'))
 
 # Commands Section - Defines the commands the user can input.
 x = """              Task Master 3000 Commands:
-task add "task name"  		# Adds new tasks
-task show               	# Show all remaining tasks
-task delete "task number"       # Delete a task
-task count                      # Counts the number of remaining tasks
+./taskmaster add "task name"  		# Adds new tasks
+./taskmaster show               	# Show all remaining tasks
+./taskmaster delete "task number"       # Delete a task
+./taskmaster count                      # Counts the number of remaining tasks
 """
 print(x)
 
-#Login Section.  Requires the user to login (case sensative).  User will have 3 attempts to login before being booted.
+#Login Section.  Requires the user to login (case sensative). 
 user_list = ["Elliot", "Chris"]
 user_name = input("Please enter your username: ")
 while user_name in user_list:
@@ -33,6 +33,7 @@ def add(newtask):
     f.close()
     newtask = '"'+newtask+'"'
     print(f"Added the task: {newtask}") 
+    show()
    
 # Function that deletes a task
 def delete(number):
@@ -47,9 +48,11 @@ def delete(number):
                     f.write(i)
             f.truncate()
         print(f"Deleted task #{number}")
+        show()
  
     except Exception as e:
         print(f" There is no task #{number}.")
+        show()
         
  # Function that shows a list of tasks
 def show():
