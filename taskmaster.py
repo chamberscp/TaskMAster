@@ -1,8 +1,8 @@
-https://github.com/chamberscp/TaskMaster
+# https://github.com/chamberscp/TaskMaster
 
 import sys
+import  os
 from pyfiglet import Figlet
-import os
 
 #Figletdisplays the taskmaster MASTER 3000 Logo in "big" wordart format
 f = Figlet(font='big')
@@ -50,7 +50,7 @@ def delete(number):
                     f.write(i)
             f.truncate()
         print(f"Deleted task #{number}")
-        show()
+        
  
     except Exception as e:
         print(f" There is no task #{number}.")
@@ -59,12 +59,28 @@ def delete(number):
  # Function that shows a list of tasks
 def show():
     with open(user_name + '.txt', 'r') as q:
-        if os.path.getsize(user_name +'.txt') >1:
-            for i, line in enumerate(q, start=1):
-                print('{} = {}'.format(i, line.strip()))      
-        else:
+        if os.path.getsize(user_name +'.txt') <1:
             print("You don't have any tasks")
+        else:    
+        #    for i, line in enumerate(q, start=1):
+        #        pass
+            data = q.read().splitlines()
+            total_lines=len(data)
+            first_line=0
+            skipped_lines=15
+            while skipped_lines <= total_lines:
+                print("\n".join(data[first_line:skipped_lines]))
+                first_line = skipped_lines
+                skipped_lines = skipped_lines + 15
+                myinput=input("Press ENTER key to continue or press q to quit")
+                if myinput.lower() == 'q':
+                    break
+                else:
+                    continue
+            else:
+                print("\n".join(data[first_line:skipped_lines]))
         
+                
 # Function to update list of tasks
 def ud():
     try:
@@ -101,4 +117,7 @@ if __name__ == '__main__':
             globals()[args[1]](*args[2:])
     finally:
             ud()
+        
+        
+        
         
