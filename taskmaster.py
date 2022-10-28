@@ -1,11 +1,14 @@
 # https://github.com/chamberscp/TaskMaster
 
 import datetime
+import fileinput
 import os
+import re
 import sys
 import time
 from   pyfiglet import Figlet
 from   rich     import print as rprint
+from   rich.pretty    import pprint
 
 
 #Figletdisplays the taskmaster MASTER 3000 Logo in "big" wordart format
@@ -26,7 +29,8 @@ print(menu)
 user_list = ["Elliot", "Chris"]
 user_name = input("Please enter your username: ")
 while user_name in user_list:
-    print(f"Welcome " + user_name)
+    pprint(f"Welcome " + user_name)
+    time.sleep(1.5)
     break
 else:
     print("Unauthorized user.  Please enter valid username: ")
@@ -49,13 +53,15 @@ def complete(num):
     try:
         update()
         num = int(num)
-        f = open(user_name + '.txt', 'a')
-        st = '***COMPLETED*** '+str(datetime.datetime.today()).split()[0]+' '+d[num]
-        f.write(st)
-        f.write("\n")
-        f.close()
-        rprint(f"Marked task #{num} as complete. Getting your new list. Please wait....")
-        time.sleep(2)
+        with open(user_name + '.txt', 'r') as f:
+            data = f.readlines()
+        newdata = '***COMPLETED*** '+str(datetime.datetime.today()).split()[0]+' '+d[num]
+        with open(user_name + '.txt', 'w') as f:
+            f.write(newdata)
+            f.write("\n")
+            f.close()
+            rprint(f"Marked task #{num} as complete. Getting your new list. Please wait....")
+            time.sleep(1.5)
         
         with open(user_name +'.txt', 'r+') as f:
             lines = f.readlines()
@@ -66,39 +72,60 @@ def complete(num):
                     f.write(i)
             f.truncate()
         show()
-    
     except:
-        print(f"There is no task #{num}.")
-  
+        rprint(f"There is no task #{num}. Getting your task list")
+
 # Function to delete a task
-def delete(number):
+def delete(num):
     try:
-        number = int(number)
+        num = int(num)
         update()
         with open(user_name +'.txt', "r+") as f:
             lines = f.readlines()
             f.seek(0)
             for i in lines:
-                if i.strip('\n') != d[number]:
+                if i.strip('\n') != d[num]:
                     f.write(i)
             f.truncate()
-        rprint(f"Deleted task #{number}")
+        rprint(f"Deleted task #{num}.  Getting your new list.")
+        time.sleep(2)
+        show()
     except Exception as e:
-        rprint(f"There is no task #{number}.")
+        rprint(f"There is no task #{num}. Getting your task list")
+        time.sleep(2)
         show()
         
- # Function that shows a list of tasks
+# Add line numbers in place.  Adds an extra line.  If implemented, would need to remove the line numbers with another function
+def add_numbers():
+    with open(user_name+'.txt', 'r+') as f:
+        line_number = 1
+        for line in fileinput.input(user_name+'.txt', inplace=True):
+            print('{} {}'.format(line_number, line))
+            line_number +=1
+
+# Delete numbers from the list - Not working well.
+def del_numbers():
+    for line in fileinput.input(user_name+'.txt', inplace=True):
+        print(re.sub('\d+', '', line)),
+
+# Delete extra spaces from the list
+def del_space():
+    for line in open(user_name+'.txt'):
+        if len(line) > 1 or line != '\n':
+            print(line, end='')
+ 
+# Function that shows a list of tasks
 def show():
-    with open(user_name + '.txt', 'r') as q:
+    update()
+    with open(user_name + '.txt', 'r+') as q:
         if os.path.getsize(user_name +'.txt') <1:
             print("You don't have any tasks")
         else:
             enum()
-            '''data = q.read().splitlines()
+            data = q.read().splitlines()
             total_lines=len(data)
             first_line=0
             skipped_lines=15
-            print("\n".join(data[first_line:skipped_lines]))
             while skipped_lines <= total_lines:
                 print("\n".join(data[first_line:skipped_lines]))
                 first_line = skipped_lines
@@ -107,13 +134,14 @@ def show():
                 if myinput.lower() == 'q':
                     break
                 else:
-                    print("\n".join(data[first_line:skipped_lines]))'''
-            
+                    print("\n".join(data[first_line:skipped_lines]))
+           
+# Enumerate Function            
 def enum():
-    with open(user_name+'.txt') as f:
+    with open(user_name+'.txt', 'r+') as f:
         for index, line in enumerate(f,start=1):
-            print('{}. {}'.format(index, line.strip()))
-                
+            print('{} {}'.format(index, line.strip()))
+                 
 # Function to update list of tasks
 def update():
     try:
@@ -126,6 +154,7 @@ def update():
     except:
         print("You have no pending tasks")
 
+# Function to count the remaining tasks
 def count():
     with open(user_name + '.txt', "r") as anothervar:
         var1 = len(anothervar.readlines())
@@ -135,8 +164,7 @@ def count():
             rprint(f"You have {var1} tasks left")
             time.sleep(2)
             show()  
-                  
-        
+                     
 # Main block
 if __name__ == '__main__':
     try:
@@ -150,7 +178,7 @@ if __name__ == '__main__':
         if(args[1] == 'add' and len(args[2:]) == 0):
             print("You forgot to list the task after the add command")
             
-        elif(args[1] == 'done' and len(args[2:]) ==0):
+        elif(args[1] == 'complete' and len(args[2:]) ==0):
             print("You forgot to tell me what number to mark as complete.  Please try again")
         
         elif(args[1] == 'delete' and len(args[2:]) == 0):
@@ -159,8 +187,4 @@ if __name__ == '__main__':
         else:
             globals()[args[1]](*args[2:])
     finally:
-            update()
-        
-        
-        
-        
+            update()    
