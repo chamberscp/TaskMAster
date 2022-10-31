@@ -12,7 +12,7 @@ from   pyfiglet import Figlet
 
 allTasks = []       
 PAGE_LENGTH = 15    
-page = 0   
+page = 0
 
 #Figletdisplays the taskmaster MASTER 3000 Logo in "big" wordart format
 f = Figlet(font='big')
@@ -55,7 +55,7 @@ def complete(num):
         num = int(num)
         with open(user_name + '.txt', 'r') as f:
             data = f.readlines()
-        newdata = '***COMPLETED*** '+str(datetime.datetime.today()).split()[0]+' '+d[num]
+        newdata = '***COMPLETED*** '+str(datetime.datetime.today()).split()[0]+' '+[num]
         with open(user_name + '.txt', 'w') as f:
             f.write(newdata)
             f.write("\n")
@@ -68,7 +68,7 @@ def complete(num):
             f.seek(0)
 			
             for i in lines:
-                if i.strip('\n') != d[num]:
+                if i.strip('\n') != [num]:
                     f.write(i)
             f.truncate()
         show()
@@ -82,32 +82,45 @@ def delete(num):
         with open(user_name +'.txt', "r+") as f:
             lines = f.readlines()
             f.seek(0)
-            for i in lines:
-                if i.strip('\n') != d[num]:
-                    f.write(i)
             f.truncate()
-        print(f"Deleted task #{num}.  Getting your new list.")
-        time.sleep(2)
-        show()
+            for i, line in enumerate(lines):
+                if i not in {3-1}:
+                    f.write(line)
+                
+            print(f"Deleted task #{num}.  Getting your new list.")
+            time.sleep(2)
+
+        show()    
     except Exception as e:
         print(f"There is no task #{num}. Getting your task list")
         time.sleep(2)
-        show()
-        
+        show()    
+
+
+       
 # Function that shows a list of tasks (credit for pagination to argiopetech@github)
 def show():
-    global allTasks
-    minTask = page * PAGE_LENGTH
     with open(user_name + '.txt', 'r') as q:
         if os.path.getsize(user_name +'.txt') <1:
             print("You don't have any tasks")
+        
         else:
             allTasks =q.read().split('\n')
-            maxTask = min((page + 1) * PAGE_LENGTH, len(allTasks))
-            for i in range(minTask, maxTask):
-                print(f'{i+1}. {allTasks[i]}')
-           
+            currentPos = 0
+            stepPos = 15
             
+            for i in range(0, len(allTasks)):
+                if currentPos < stepPos:
+                   currentPos += 1
+                   print(f'{i+1}. {allTasks[i]}')                  
+
+                else:            
+                    currentPos += 1
+                    blah = input("Press any key to continue")
+                    print(f'{i+1}.- {allTasks[i]}')                
+                    stepPos += 15
+                    
+                    
 # Function to count the remaining tasks
 def count():
     with open(user_name + '.txt', "r") as anothervar:
@@ -122,8 +135,7 @@ def count():
 # Main block
 if __name__ == '__main__':
     try:
-        d = {}
-        don = {}
+      
         args = sys.argv
         
         if(args[1] == 'delete'):
@@ -137,8 +149,8 @@ if __name__ == '__main__':
         
         elif(args[1] == 'delete' and len(args[2:]) == 0):
             print("You forgot to tell me what number to delete.  Please try again")
-        
+            
         else:
             globals()[args[1]](*args[2:])
     finally:
-            quit  
+            pass 
