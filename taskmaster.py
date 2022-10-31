@@ -43,37 +43,16 @@ else:
 def add(newtask):
     f = open(user_name +'.txt', 'a')
     f.write("\n")
-    f.write(newtask)
+    f.write(f'{True},{newtask}')
     f.close()
     print(f"Added the task: {newtask}. Getting your new list. Please wait....") 
     time.sleep(2)
     show()
    
- # Function to Mark Tasks Complete
-def complete(num):
-    try:
-        num = int(num)
-        with open(user_name + '.txt', 'r') as f:
-            data = f.readlines()
-        newdata = '***COMPLETED*** '+str(datetime.datetime.today()).split()[0]+' '+[num]
-        with open(user_name + '.txt', 'w') as f:
-            f.write(newdata)
-            f.write("\n")
-            f.close()
-            print(f"Marked task #{num} as complete. Getting your new list. Please wait....")
-            time.sleep(1.5)
-        
-        with open(user_name +'.txt', 'r+') as f:
-            lines = f.readlines()
-            f.seek(0)
-			
-            for i in lines:
-                if i.strip('\n') != [num]:
-                    f.write(i)
-            f.truncate()
-        show()
-    except:
-        print(f"There is no task #{num}. Getting your task list")
+ # Function to Mark Tasks Complete (credit to argiopetech@github for completion function)
+#def complete(num):
+    
+    
 
 # Function to delete a task
 def delete(num):
@@ -95,9 +74,7 @@ def delete(num):
         print(f"There is no task #{num}. Getting your task list")
         time.sleep(2)
         show()    
-
-
-       
+    
 # Function that shows a list of tasks (credit for pagination to argiopetech@github)
 def show():
     with open(user_name + '.txt', 'r') as q:
@@ -119,7 +96,6 @@ def show():
                     blah = input("Press any key to continue")
                     print(f'{i+1}.- {allTasks[i]}')                
                     stepPos += 15
-                    
                     
 # Function to count the remaining tasks
 def count():
