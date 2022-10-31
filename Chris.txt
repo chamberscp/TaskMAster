@@ -1,3 +1,4 @@
-one
-two
-five
+[True], ['Tickle the pickle']
+[True], ['Walk the dog']
+[True], ['Open the door']
+[True], ['Smash the pumpkin']

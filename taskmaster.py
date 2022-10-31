@@ -14,6 +14,9 @@ allTasks = []
 PAGE_LENGTH = 15    
 page = 0
 
+COMPLETED = 0
+DESCRIPTION = 1
+
 #Figletdisplays the taskmaster MASTER 3000 Logo in "big" wordart format
 f = Figlet(font='big')
 print(f.renderText('Task Master 3000'))
@@ -41,18 +44,25 @@ else:
                     
 # Function to add tasks
 def add(newtask):
-    f = open(user_name +'.txt', 'a')
-    f.write("\n")
-    f.write(f'{True},{newtask}')
-    f.close()
-    print(f"Added the task: {newtask}. Getting your new list. Please wait....") 
-    time.sleep(2)
-    show()
+    with open(user_name +'.txt', "r+") as f:
+        f.readlines()
+        f.write("\n")
+        f.write(f'{[True]}, {[newtask]}')
+        print(f"Added the task: {newtask}. Getting your new list. Please wait....") 
+        time.sleep(2)
+        show()
    
  # Function to Mark Tasks Complete (credit to argiopetech@github for completion function)
 #def complete(num):
+def completeTask(num):
+    toComplete = {num}(1, len(allTasks))
     
-    
+    allTasks[COMPLETED] = True
+ 
+ # Function to delete all tasks that exist before first incomplete tasks(credit to argiopetech@github for completion function)   
+def del_top_cmplt_tasks():
+    while allTasks[0][COMPLETED]:
+        del allTasks[0]    
 
 # Function to delete a task
 def delete(num):
@@ -77,11 +87,12 @@ def delete(num):
     
 # Function that shows a list of tasks
 def show():
-    with open(user_name + '.txt', 'r') as q:
+    with open(user_name + '.txt', 'r+') as q:
         if os.path.getsize(user_name +'.txt') <1:
             print("You don't have any tasks")
         
         else:
+            #del_top_cmplt_tasks()
             allTasks =q.read().split('\n')
             currentPos = 0
             stepPos = 15
@@ -94,7 +105,7 @@ def show():
                 else:            
                     currentPos += 1
                     blah = input("Press any key to continue")
-                    print(f'{i+1}.- {allTasks[i]}')                
+                    print(f'{i+1}. {allTasks[i]}')                
                     stepPos += 15
                     
 # Function to count the remaining tasks
