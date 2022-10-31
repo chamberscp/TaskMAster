@@ -75,7 +75,7 @@ def delete(num):
         time.sleep(2)
         show()    
     
-# Function that shows a list of tasks (credit for pagination to argiopetech@github)
+# Function that shows a list of tasks
 def show():
     with open(user_name + '.txt', 'r') as q:
         if os.path.getsize(user_name +'.txt') <1:
