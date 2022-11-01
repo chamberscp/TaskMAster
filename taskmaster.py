@@ -6,9 +6,10 @@ import os
 import re
 import sys
 import time
-from   pyfiglet import Figlet
-#from   rich     import print as rprint
-#from   rich.pretty    import pprint
+from   pyfiglet         import Figlet
+from   rich             import print as rprint
+from   rich.pretty      import pprint
+"credit to argiopetech@github for basically writing my program"
 
 allTasks = []       
 PAGE_LENGTH = 15    
@@ -47,22 +48,45 @@ def add(newtask):
     with open(user_name +'.txt', "r+") as f:
         f.readlines()
         f.write("\n")
-        f.write(f'{[True]}, {[newtask]}')
-        print(f"Added the task: {newtask}. Getting your new list. Please wait....") 
+        f.write(f'{False},{newtask}')
+    print(f"Added the task: {newtask}. Getting your new list. Please wait....") 
+    time.sleep(2)
+    show()
+   
+#Function to Mark Tasks Complete (credit to argiopetech@github for completion function)
+def complete(num):
+    try:
+        num = int(num)
+        with open(user_name +'.txt', "r+") as f:
+            lines = f.readlines()
+            lines[num - 1] = "True," + lines[num - 1].split(',', maxsplit=1)[DESCRIPTION]
+            f.seek(0)
+            f.truncate()
+        
+            for line in lines:
+                f.write(line)
+        print(f"Completed the task: {num}. Getting your new list. Please wait....")
         time.sleep(2)
         show()
-   
- # Function to Mark Tasks Complete (credit to argiopetech@github for completion function)
-#def complete(num):
-def completeTask(num):
-    toComplete = {num}(1, len(allTasks))
-    
-    allTasks[COMPLETED] = True
+
+    except ValueError:
+        print(f"There is no task #{num}. Getting your task list")
+        time.sleep(2)
+        show()    
  
- # Function to delete all tasks that exist before first incomplete tasks(credit to argiopetech@github for completion function)   
+# Function to delete all tasks that exist before first incomplete tasks(credit to argiopetech@github for completion function)   
 def del_top_cmplt_tasks():
-    while allTasks[0][COMPLETED]:
-        del allTasks[0]    
+    with open(user_name +'.txt', "r+") as f:
+        lines = f.readlines()
+        
+        while len(lines) > 0 and lines[0].strip().split(',', maxsplit=1)[COMPLETED] == "True":
+            del lines[0]
+        
+        f.seek(0)
+        f.truncate()
+        
+        for line in lines:
+            f.write(line)
 
 # Function to delete a task
 def delete(num):
@@ -73,7 +97,7 @@ def delete(num):
             f.seek(0)
             f.truncate()
             for i, line in enumerate(lines):
-                if i not in {3-1}:
+                if i != (num - 1):
                     f.write(line)
                 
             print(f"Deleted task #{num}.  Getting your new list.")
@@ -87,21 +111,28 @@ def delete(num):
     
 # Function that shows a list of tasks
 def show():
+    del_top_cmplt_tasks()
+
     with open(user_name + '.txt', 'r+') as q:
         if os.path.getsize(user_name +'.txt') <1:
             print("You don't have any tasks")
         
         else:
-            #del_top_cmplt_tasks()
-            allTasks =q.read().split('\n')
+            allTasks = q.read().split('\n')
             currentPos = 0
             stepPos = 15
+            
             
             for i in range(0, len(allTasks)):
                 if currentPos < stepPos:
                    currentPos += 1
-                   print(f'{i+1}. {allTasks[i]}')                  
-
+                   
+                   tmp = allTasks[i].strip().split(',', maxsplit=1)
+                   tmp[COMPLETED] = tmp[COMPLETED] == "True"
+                   if tmp[COMPLETED]:
+                       print(f'{i+1}. ***{tmp[DESCRIPTION]}***')                  
+                   else:
+                       print(f'{i+1}. {tmp[DESCRIPTION]}')
                 else:            
                     currentPos += 1
                     blah = input("Press any key to continue")
